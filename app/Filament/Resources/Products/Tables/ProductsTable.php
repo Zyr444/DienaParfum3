@@ -18,7 +18,8 @@ class ProductsTable
             ->columns([
                 ImageColumn::make('image')
                     ->label('Foto')
-                    ->circular(),
+                    ->circular()
+                    ->state(fn ($record) => $record->image ? (str_starts_with($record->image, 'http') || str_starts_with($record->image, '/') ? asset(ltrim($record->image, '/')) : asset('storage/' . $record->image)) : null),
                 
                 TextColumn::make('name')
                     ->label('Nama Aroma')
@@ -40,7 +41,7 @@ class ProductsTable
                     })
                     ->sortable(),
 
-                TextColumn::make('category')
+                TextColumn::make('category.title')
                     ->label('Kategori')
                     ->badge()
                     ->searchable(),
@@ -54,12 +55,7 @@ class ProductsTable
             ->filters([
                 \Filament\Tables\Filters\SelectFilter::make('category')
                     ->label('Kategori')
-                    ->options([
-                        'Men' => 'Pria',
-                        'Women' => 'Wanita',
-                        'Unisex' => 'Unisex',
-                        'Premium' => 'Premium Series',
-                    ]),
+                    ->relationship('category', 'title'),
             ])
             ->recordActions([
                 EditAction::make(),

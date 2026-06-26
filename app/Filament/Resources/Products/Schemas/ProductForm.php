@@ -42,14 +42,9 @@ class ProductForm
                             ->default(0)
                             ->minValue(0),
 
-                        \Filament\Forms\Components\Select::make('category')
+                        \Filament\Forms\Components\Select::make('category_id')
                             ->label('Kategori')
-                            ->options([
-                                'Men' => 'Pria',
-                                'Women' => 'Wanita',
-                                'Unisex' => 'Unisex',
-                                'Premium' => 'Premium Series',
-                            ])
+                            ->relationship('category', 'title')
                             ->required(),
                     ])->columns(3),
 

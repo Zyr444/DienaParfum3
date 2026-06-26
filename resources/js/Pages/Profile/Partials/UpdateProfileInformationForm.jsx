@@ -16,6 +16,9 @@ export default function UpdateProfileInformation({
         useForm({
             name: user.name,
             email: user.email,
+            phone: user.phone || '',
+            address: user.address || '',
+            post_code: user.post_code || '',
         });
 
     const submit = (e) => {
@@ -32,7 +35,7 @@ export default function UpdateProfileInformation({
                 </h2>
 
                 <p className="mt-1 text-sm text-gray-600">
-                    Update your account's profile information and email address.
+                    Update your account's profile information and shipping address.
                 </p>
             </header>
 
@@ -67,6 +70,52 @@ export default function UpdateProfileInformation({
                     />
 
                     <InputError className="mt-2" message={errors.email} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="phone" value="No. WhatsApp" />
+
+                    <TextInput
+                        id="phone"
+                        type="text"
+                        className="mt-1 block w-full"
+                        value={data.phone}
+                        onChange={(e) => setData('phone', e.target.value)}
+                        autoComplete="tel"
+                        placeholder="Contoh: 089531..."
+                    />
+
+                    <InputError className="mt-2" message={errors.phone} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="address" value="Alamat Lengkap" />
+
+                    <textarea
+                        id="address"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        rows="3"
+                        value={data.address}
+                        onChange={(e) => setData('address', e.target.value)}
+                        placeholder="Nama jalan, nomor rumah, RT/RW, kecamatan, kota/provinsi..."
+                    />
+
+                    <InputError className="mt-2" message={errors.address} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="post_code" value="Kode Pos" />
+
+                    <TextInput
+                        id="post_code"
+                        type="text"
+                        className="mt-1 block w-full"
+                        value={data.post_code}
+                        onChange={(e) => setData('post_code', e.target.value)}
+                        placeholder="Contoh: 12345"
+                    />
+
+                    <InputError className="mt-2" message={errors.post_code} />
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (

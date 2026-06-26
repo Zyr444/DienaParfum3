@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { translations } from '../translations';
@@ -75,6 +75,11 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products, co
         const [language, setLanguage] = useState('id');
     const t = translations[language];
 
+    const stripHtml = (html) => {
+        if (!html) return '';
+        return html.replace(/<[^>]*>?/gm, '');
+    };
+
     // Toggle Handlers
     const toggleLanguage = () => setLanguage(lang => lang === 'id' ? 'en' : 'id');
     const [selectedCategory, setSelectedCategory] = useState('all');
@@ -90,6 +95,30 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products, co
     const [openFaq, setOpenFaq] = useState(null);
     const [isNavScrolled, setIsNavScrolled] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
+    const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+    const [checkoutForm, setCheckoutForm] = useState({
+        first_name: '',
+        last_name: '',
+        phone: '',
+        address1: '',
+        post_code: '',
+    });
+    const [isCheckoutSubmitting, setIsCheckoutSubmitting] = useState(false);
+
+    useEffect(() => {
+        if (isCheckoutOpen && auth?.user) {
+            const nameParts = auth.user.name ? auth.user.name.split(' ') : ['', ''];
+            const firstName = nameParts[0] || '';
+            const lastName = nameParts.slice(1).join(' ') || '';
+            setCheckoutForm({
+                first_name: firstName,
+                last_name: lastName,
+                phone: auth.user.phone || '',
+                address1: auth.user.address || '',
+                post_code: auth.user.post_code || '',
+            });
+        }
+    }, [isCheckoutOpen, auth]);
 
     useEffect(() => {
         const timer = setTimeout(() => setShowSplash(false), 2200);
@@ -252,29 +281,92 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products, co
 
     const handleWhatsAppCheckout = () => {
         if (cartItemCount === 0) return;
-        
-        let message = "Halo Diena Parfum, saya mau pesan:\n\n";
-        Object.values(cart).forEach(item => {
-            message += `- ${item.product.name} (${item.quantity}x) = ${formatRupiah(item.product.price * item.quantity)}\n`;
-        });
-        
+        if (!auth?.user) {
+            alert("Silakan login terlebih dahulu untuk melakukan pemesanan.");
+            router.visit('/login');
+            return;
+        }
+        setIsCheckoutOpen(true);
+    };
+
+    const handleCheckoutSubmit = async (e) => {
+        e.preventDefault();
+        if (isCheckoutSubmitting) return;
+
+        if (!checkoutForm.first_name || !checkoutForm.last_name || !checkoutForm.phone || !checkoutForm.address1) {
+            alert("Mohon lengkapi semua kolom yang wajib diisi!");
+            return;
+        }
+
+        setIsCheckoutSubmitting(true);
+
+        const cartItems = Object.values(cart).map(item => ({
+            product_id: item.product.id,
+            price: parseFloat(item.product.price),
+            quantity: item.quantity,
+        }));
+
         let total = cartTotal;
+        let discount = 0;
         if (appliedVoucher) {
-            let discount = 0;
             if (appliedVoucher.type === 'percent') {
                 discount = cartTotal * (parseFloat(appliedVoucher.value) / 100);
             } else {
                 discount = parseFloat(appliedVoucher.value);
             }
             total = Math.max(0, cartTotal - discount);
-            message += `\nSubtotal: ${formatRupiah(cartTotal)}\n`;
-            message += `Diskon Voucher (${appliedVoucher.code}): -${formatRupiah(discount)}\n`;
         }
-        
-        message += `\n*Total Akhir: ${formatRupiah(total)}*`;
 
-        const encodedMessage = encodeURIComponent(message);
-        window.open(`https://wa.me/6289531222146?text=${encodedMessage}`, '_blank');
+        try {
+            const response = await axios.post('/checkout', {
+                first_name: checkoutForm.first_name,
+                last_name: checkoutForm.last_name,
+                email: auth.user.email,
+                phone: checkoutForm.phone,
+                address1: checkoutForm.address1,
+                address2: '',
+                post_code: checkoutForm.post_code,
+                country: 'Indonesia',
+                cart_items: cartItems,
+                sub_total: cartTotal,
+                total_amount: total,
+                coupon: appliedVoucher ? appliedVoucher.code : null,
+            });
+
+            if (response.data.success) {
+                setCart({});
+                setIsCartOpen(false);
+                setIsCheckoutOpen(false);
+
+                let message = `Halo Diena Parfum, saya telah membuat pesanan di website!\n\n`;
+                message += `*Nomor Pesanan:* #${response.data.order_number}\n`;
+                message += `*Nama:* ${checkoutForm.first_name} ${checkoutForm.last_name}\n`;
+                message += `*WhatsApp:* ${checkoutForm.phone}\n`;
+                message += `*Alamat:* ${checkoutForm.address1}\n\n`;
+                message += `*Detail Pesanan:*\n`;
+                Object.values(cart).forEach(item => {
+                    message += `- ${item.product.name} (${item.quantity}x) = ${formatRupiah(item.product.price * item.quantity)}\n`;
+                });
+
+                if (appliedVoucher) {
+                    message += `\nSubtotal: ${formatRupiah(cartTotal)}\n`;
+                    message += `Diskon (${appliedVoucher.code}): -${formatRupiah(discount)}\n`;
+                }
+                message += `\n*Total Pembayaran: ${formatRupiah(total)}*\n\n`;
+                message += `Mohon info detail rekening pembayarannya ya min. Terima kasih! ✦`;
+
+                const encodedMessage = encodeURIComponent(message);
+                const waUrl = `https://wa.me/6289531222146?text=${encodedMessage}`;
+
+                window.open(waUrl, '_blank');
+                window.location.href = '/dashboard';
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Gagal memproses pesanan. Silakan coba lagi.");
+        } finally {
+            setIsCheckoutSubmitting(false);
+        }
     };
 
     // Countdown Timer — target: 3 days from now, auto-resets when expired
@@ -710,7 +802,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products, co
                                                     <span className="block text-[16px] italic opacity-95">{product.name.includes('|') ? product.name.split('|')[1].trim() : product.name}</span>
                                                 </h3>
                                                 <p className="text-gray-400 group-hover:text-black/80 text-[10px] mb-6 flex-grow leading-relaxed line-clamp-4">
-                                                    {product.description}
+                                                    {stripHtml(product.description)}
                                                 </p>
                                                 
                                                 <div className="flex justify-between items-center mb-6">
@@ -1191,12 +1283,12 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products, co
                                         </span>
                                     </div>
                                     <button 
-                                        onClick={handleWhatsAppCheckout}
+                                        onClick={() => { setIsCartOpen(false); handleWhatsAppCheckout(); }}
                                         disabled={cartItemCount === 0}
                                         className="w-full py-4 bg-gradient-to-r from-[#FDE08B] via-[#D4AF37] to-[#AA8529] text-black font-bold uppercase tracking-widest text-sm rounded-lg hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] disabled:opacity-50 disabled:shadow-none transition-all flex justify-center items-center gap-3"
                                     >
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-                                        Checkout via WhatsApp
+                                        Checkout Pesanan
                                     </button>
                                 </div>
                             </motion.div>
@@ -1204,7 +1296,172 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products, co
                     )}
                 </AnimatePresence>
 
-                {/* â”€â”€ WA CHAT FLOATING BUTTON â”€â”€ */}
+                {/* ── CHECKOUT MODAL ── */}
+                <AnimatePresence>
+                    {isCheckoutOpen && (
+                        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setIsCheckoutOpen(false)}
+                                className="absolute inset-0 bg-black/80 backdrop-blur-md"
+                            />
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.85, y: 30 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.85, y: 30 }}
+                                transition={{ type: 'spring', damping: 25 }}
+                                className="relative bg-[#0d0d0d] border border-[#D4AF37]/20 rounded-2xl overflow-hidden max-w-4xl w-full p-8 z-10 shadow-2xl max-h-[90vh] overflow-y-auto"
+                            >
+                                <h2 className="text-2xl font-serif text-[#D4AF37] mb-6 border-b border-[#D4AF37]/10 pb-4">
+                                    Detail Pengiriman & Konfirmasi Pesanan
+                                </h2>
+                                
+                                <form onSubmit={handleCheckoutSubmit} className="grid md:grid-cols-2 gap-8 text-white">
+                                    {/* Left: Shipping Form */}
+                                    <div className="space-y-4">
+                                        <h3 className="text-md font-semibold text-gray-300 uppercase tracking-wider mb-2">Informasi Penerima</h3>
+                                        
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-xs text-gray-400 mb-1">Nama Depan *</label>
+                                                <input 
+                                                    type="text" 
+                                                    required
+                                                    value={checkoutForm.first_name}
+                                                    onChange={e => setCheckoutForm({...checkoutForm, first_name: e.target.value})}
+                                                    className="w-full bg-[#111] border border-gray-800 rounded-lg px-4 py-2.5 text-sm focus:border-[#D4AF37] focus:outline-none"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs text-gray-400 mb-1">Nama Belakang *</label>
+                                                <input 
+                                                    type="text" 
+                                                    required
+                                                    value={checkoutForm.last_name}
+                                                    onChange={e => setCheckoutForm({...checkoutForm, last_name: e.target.value})}
+                                                    className="w-full bg-[#111] border border-gray-800 rounded-lg px-4 py-2.5 text-sm focus:border-[#D4AF37] focus:outline-none"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs text-gray-400 mb-1">No. WhatsApp Aktif *</label>
+                                            <input 
+                                                type="tel" 
+                                                required
+                                                placeholder="Contoh: 08123456789"
+                                                value={checkoutForm.phone}
+                                                onChange={e => setCheckoutForm({...checkoutForm, phone: e.target.value})}
+                                                className="w-full bg-[#111] border border-gray-800 rounded-lg px-4 py-2.5 text-sm focus:border-[#D4AF37] focus:outline-none"
+                                            />
+                                            <span className="text-[10px] text-gray-500 mt-1 block">Digunakan untuk konfirmasi pesanan via chat WhatsApp.</span>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs text-gray-400 mb-1">Alamat Lengkap Pengiriman *</label>
+                                            <textarea 
+                                                required
+                                                rows="3"
+                                                placeholder="Nama jalan, nomor rumah, RT/RW, kecamatan, kabupaten/kota"
+                                                value={checkoutForm.address1}
+                                                onChange={e => setCheckoutForm({...checkoutForm, address1: e.target.value})}
+                                                className="w-full bg-[#111] border border-gray-800 rounded-lg px-4 py-2.5 text-sm focus:border-[#D4AF37] focus:outline-none resize-none"
+                                            ></textarea>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs text-gray-400 mb-1">Kode Pos (Opsional)</label>
+                                            <input 
+                                                type="text" 
+                                                value={checkoutForm.post_code}
+                                                onChange={e => setCheckoutForm({...checkoutForm, post_code: e.target.value})}
+                                                className="w-full bg-[#111] border border-gray-800 rounded-lg px-4 py-2.5 text-sm focus:border-[#D4AF37] focus:outline-none"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Right: Order Summary */}
+                                    <div className="flex flex-col justify-between bg-[#111]/50 border border-gray-800 p-6 rounded-xl">
+                                        <div>
+                                            <h3 className="text-md font-semibold text-gray-300 uppercase tracking-wider mb-4">Ringkasan Belanja</h3>
+                                            
+                                            <div className="space-y-3 max-h-[180px] overflow-y-auto pr-2 mb-4 border-b border-gray-800 pb-4">
+                                                {Object.values(cart).map(item => (
+                                                    <div key={item.product.id} className="flex justify-between items-center text-sm">
+                                                        <div>
+                                                            <p className="font-medium text-gray-200">{item.product.name}</p>
+                                                            <p className="text-xs text-gray-500">{item.quantity} x {formatRupiah(item.product.price)}</p>
+                                                        </div>
+                                                        <span className="font-semibold text-gray-300">{formatRupiah(item.product.price * item.quantity)}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            <div className="space-y-2.5 text-sm">
+                                                <div className="flex justify-between text-gray-400">
+                                                    <span>Subtotal</span>
+                                                    <span>{formatRupiah(cartTotal)}</span>
+                                                </div>
+                                                
+                                                {appliedVoucher && (
+                                                    <div className="flex justify-between text-green-500 text-xs">
+                                                        <span>Kupon ({appliedVoucher.code})</span>
+                                                        <span>
+                                                            -{formatRupiah(
+                                                                appliedVoucher.type === 'percent'
+                                                                    ? cartTotal * (parseFloat(appliedVoucher.value) / 100)
+                                                                    : parseFloat(appliedVoucher.value)
+                                                            )}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                
+                                                <div className="flex justify-between font-serif text-[#D4AF37] text-lg border-t border-gray-800 pt-3 mt-2">
+                                                    <span>Total Akhir</span>
+                                                    <span className="font-bold">
+                                                        {formatRupiah(
+                                                            appliedVoucher
+                                                                ? Math.max(0, cartTotal - (appliedVoucher.type === 'percent' ? cartTotal * (parseFloat(appliedVoucher.value) / 100) : parseFloat(appliedVoucher.value)))
+                                                                : cartTotal
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-8 flex gap-4">
+                                            <button 
+                                                type="button"
+                                                onClick={() => setIsCheckoutOpen(false)}
+                                                className="flex-1 py-3 border border-gray-800 rounded-lg hover:bg-white/5 transition-colors font-semibold uppercase tracking-wider text-xs"
+                                            >
+                                                Batal
+                                            </button>
+                                            <button 
+                                                type="submit"
+                                                disabled={isCheckoutSubmitting}
+                                                className="flex-1 py-3 bg-gradient-to-r from-[#FDE08B] to-[#D4AF37] text-black font-bold uppercase tracking-wider text-xs rounded-lg hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] disabled:opacity-50 transition-all flex justify-center items-center gap-2"
+                                            >
+                                                {isCheckoutSubmitting ? (
+                                                    <span>Memproses...</span>
+                                                ) : (
+                                                    <>
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                                                         Beli & Chat WA
+                                                     </>
+                                                 )}
+                                             </button>
+                                         </div>
+                                     </div>
+                                 </form>
+                             </motion.div>
+                         </div>
+                     )}
+                 </AnimatePresence>
+
+                {/* ── WA CHAT FLOATING BUTTON ── */}
                 <a
                     href="https://wa.me/6289531222146?text=Halo%20Diena%20Parfum%2C%20saya%20ingin%20bertanya%20tentang%20produk"
                     target="_blank"
@@ -1243,7 +1500,10 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products, co
                                         </button>
                                         <div className="text-[10px] tracking-[0.3em] text-[#D4AF37] uppercase mb-1">Diena Parfume</div>
                                         <h2 className="text-2xl font-serif text-white mb-4">{selectedProduct.name.includes('|') ? selectedProduct.name.split('|')[1].trim() : selectedProduct.name}</h2>
-                                        <p className="text-gray-400 text-sm leading-relaxed mb-6">{selectedProduct.description}</p>
+                                        <div 
+                                            className="text-gray-400 text-sm leading-relaxed mb-6" 
+                                            dangerouslySetInnerHTML={{ __html: selectedProduct.description }}
+                                        />
                                         <div className="flex flex-wrap gap-3 mb-6">
                                             <span className="text-[10px] uppercase tracking-widest border border-[#D4AF37]/30 text-[#D4AF37]/80 px-3 py-1 rounded-full">
                                                 {selectedProduct.category?.title || (typeof selectedProduct.category === 'string' ? selectedProduct.category : 'Uncategorized')}

@@ -7,9 +7,11 @@ use Inertia\Inertia;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AIChatController;
+use App\Http\Controllers\CheckoutController;
 
 Route::get('/', [ProductController::class, 'index']);
 Route::post('/api/chat-ai', [AIChatController::class, 'chat']);
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout');
 
 Route::get('/dashboard', function () {
     $coupons = App\Models\Coupon::where('status', 'active')
@@ -18,8 +20,15 @@ Route::get('/dashboard', function () {
                   ->orWhere('expires_at', '>', now());
         })
         ->get();
+
+    $orders = App\Models\Order::where('user_id', auth()->id())
+        ->with('items.product')
+        ->latest()
+        ->get();
+
     return Inertia::render('Dashboard', [
-        'coupons' => $coupons
+        'coupons' => $coupons,
+        'orders' => $orders
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
