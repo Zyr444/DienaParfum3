@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->registration()
             ->brandName('Diena Parfum')
             ->colors([
                 'primary' => Color::Hex('#D4AF37'),
