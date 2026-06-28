@@ -1,4 +1,4 @@
-﻿-- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
 --
 -- Host: localhost    Database: diena_parfum
 -- ------------------------------------------------------
@@ -16,62 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `banners`
+-- Table structure for table `admins`
 --
 
-DROP TABLE IF EXISTS `banners`;
+DROP TABLE IF EXISTS `admins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `banners` (
+CREATE TABLE `admins` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `banners_slug_unique` (`slug`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  UNIQUE KEY `admins_email_unique` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `banners`
+-- Dumping data for table `admins`
 --
 
-LOCK TABLES `banners` WRITE;
-/*!40000 ALTER TABLE `banners` DISABLE KEYS */;
-/*!40000 ALTER TABLE `banners` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `brands`
---
-
-DROP TABLE IF EXISTS `brands`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `brands` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `brands_slug_unique` (`slug`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `brands`
---
-
-LOCK TABLES `brands` WRITE;
-/*!40000 ALTER TABLE `brands` DISABLE KEYS */;
-INSERT INTO `brands` VALUES (1,'Chanel','chanel','active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(2,'Dior','dior','active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(3,'Guerlain','guerlain','active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(4,'Hermes','hermes','active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(5,'Lancome','lancome','active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(6,'Prada','prada','active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(7,'Versace','versace','active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(8,'Yves Saint Laurent','yves-saint-laurent','active','2026-06-14 01:35:01','2026-06-14 01:35:01');
-/*!40000 ALTER TABLE `brands` ENABLE KEYS */;
+LOCK TABLES `admins` WRITE;
+/*!40000 ALTER TABLE `admins` DISABLE KEYS */;
+INSERT INTO `admins` VALUES (1,'Admin Diena Parfum','admin@dienaparfum.com','2026-06-28 06:00:49','$2y$12$KeWWSSwO3IveO87OusHY4Ojfny3BS0j0s5aMYagsFJGIoK0QDBRKK',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50');
+/*!40000 ALTER TABLE `admins` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -82,8 +54,8 @@ DROP TABLE IF EXISTS `cache`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cache` (
-  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` bigint NOT NULL,
   PRIMARY KEY (`key`),
   KEY `cache_expiration_index` (`expiration`)
@@ -96,7 +68,7 @@ CREATE TABLE `cache` (
 
 LOCK TABLES `cache` WRITE;
 /*!40000 ALTER TABLE `cache` DISABLE KEYS */;
-INSERT INTO `cache` VALUES ('laravel-cache-da4b9237bacccdf19c0760cab7aec4a8359010b0','i:1;',1782239725),('laravel-cache-da4b9237bacccdf19c0760cab7aec4a8359010b0:timer','i:1782239725;',1782239725),('laravel-cache-filament-register:ca825d36669940daf7b2ab53ac3dee806cded5a3','i:2;',1782541250),('laravel-cache-filament-register:ca825d36669940daf7b2ab53ac3dee806cded5a3:timer','i:1782541250;',1782541250),('laravel-cache-livewire-rate-limiter:16d36dff9abd246c67dfac3e63b993a169af77e6','i:1;',1782540050),('laravel-cache-livewire-rate-limiter:16d36dff9abd246c67dfac3e63b993a169af77e6:timer','i:1782540050;',1782540050),('laravel-cache-livewire-rate-limiter:9a85c7d25d4828b60e211b83318cc879a9769002','i:2;',1782541250),('laravel-cache-livewire-rate-limiter:9a85c7d25d4828b60e211b83318cc879a9769002:timer','i:1782541250;',1782541250);
+INSERT INTO `cache` VALUES ('laravel-cache-livewire-rate-limiter:16d36dff9abd246c67dfac3e63b993a169af77e6','i:1;',1782652339),('laravel-cache-livewire-rate-limiter:16d36dff9abd246c67dfac3e63b993a169af77e6:timer','i:1782652339;',1782652339);
 /*!40000 ALTER TABLE `cache` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,8 +80,8 @@ DROP TABLE IF EXISTS `cache_locks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cache_locks` (
-  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `owner` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` bigint NOT NULL,
   PRIMARY KEY (`key`),
   KEY `cache_locks_expiration_index` (`expiration`)
@@ -126,40 +98,6 @@ LOCK TABLES `cache_locks` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `carts`
---
-
-DROP TABLE IF EXISTS `carts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `carts` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint unsigned NOT NULL,
-  `product_id` bigint unsigned NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `quantity` int NOT NULL DEFAULT '1',
-  `amount` decimal(10,2) NOT NULL,
-  `status` enum('new','pending','abandoned') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'new',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `carts_user_id_foreign` (`user_id`),
-  KEY `carts_product_id_foreign` (`product_id`),
-  CONSTRAINT `carts_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `carts_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `carts`
---
-
-LOCK TABLES `carts` WRITE;
-/*!40000 ALTER TABLE `carts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `carts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `categories`
 --
 
@@ -168,14 +106,14 @@ DROP TABLE IF EXISTS `categories`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `summary` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `summary` text COLLATE utf8mb4_unicode_ci,
+  `photo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_parent` tinyint(1) NOT NULL DEFAULT '0',
   `parent_id` bigint unsigned DEFAULT NULL,
   `added_by` bigint unsigned DEFAULT NULL,
-  `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `status` enum('active','inactive') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -191,39 +129,8 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (1,'Men\'s Fragrance','mens-fragrance',NULL,NULL,1,NULL,NULL,'active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(2,'Women\'s Fragrance','womens-fragrance',NULL,NULL,1,NULL,NULL,'active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(3,'Unisex Fragrance','unisex-fragrance',NULL,NULL,1,NULL,NULL,'active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(4,'Cologne','mens-cologne',NULL,NULL,0,1,NULL,'active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(5,'Eau de Toilette','mens-eau-de-toilette',NULL,NULL,0,1,NULL,'active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(6,'Eau de Parfum','mens-eau-de-parfum',NULL,NULL,0,1,NULL,'active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(7,'Eau de Toilette','womens-eau-de-toilette',NULL,NULL,0,2,NULL,'active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(8,'Eau de Parfum','womens-eau-de-parfum',NULL,NULL,0,2,NULL,'active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(9,'Perfume','womens-perfume',NULL,NULL,0,2,NULL,'active','2026-06-14 01:35:01','2026-06-14 01:35:01');
+INSERT INTO `categories` VALUES (1,'Men\'s Fragrance','mens-fragrance',NULL,NULL,1,NULL,NULL,'active','2026-06-28 06:00:50','2026-06-28 06:00:50'),(2,'Women\'s Fragrance','womens-fragrance',NULL,NULL,1,NULL,NULL,'active','2026-06-28 06:00:50','2026-06-28 06:00:50'),(3,'Unisex Fragrance','unisex-fragrance',NULL,NULL,1,NULL,NULL,'active','2026-06-28 06:00:50','2026-06-28 06:00:50'),(4,'Cologne','mens-cologne',NULL,NULL,0,1,NULL,'active','2026-06-28 06:00:50','2026-06-28 06:00:50'),(5,'Eau de Toilette','mens-eau-de-toilette',NULL,NULL,0,1,NULL,'active','2026-06-28 06:00:50','2026-06-28 06:00:50'),(6,'Eau de Parfum','mens-eau-de-parfum',NULL,NULL,0,1,NULL,'active','2026-06-28 06:00:50','2026-06-28 06:00:50'),(7,'Eau de Toilette','womens-eau-de-toilette',NULL,NULL,0,2,NULL,'active','2026-06-28 06:00:50','2026-06-28 06:00:50'),(8,'Eau de Parfum','womens-eau-de-parfum',NULL,NULL,0,2,NULL,'active','2026-06-28 06:00:50','2026-06-28 06:00:50'),(9,'Perfume','womens-perfume',NULL,NULL,0,2,NULL,'active','2026-06-28 06:00:50','2026-06-28 06:00:50');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `coupons`
---
-
-DROP TABLE IF EXISTS `coupons`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `coupons` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` enum('fixed','percent') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'fixed',
-  `value` decimal(10,2) NOT NULL,
-  `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
-  `expires_at` datetime DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `coupons_code_unique` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `coupons`
---
-
-LOCK TABLES `coupons` WRITE;
-/*!40000 ALTER TABLE `coupons` DISABLE KEYS */;
-INSERT INTO `coupons` VALUES (1,'WELCOME10','percent',10.00,'active',NULL,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(2,'SAVE50K','fixed',50000.00,'active',NULL,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(3,'SUMMER20','percent',20.00,'active',NULL,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(4,'LOYALTY100K','fixed',100000.00,'active',NULL,'2026-06-14 01:35:01','2026-06-14 01:35:01');
-/*!40000 ALTER TABLE `coupons` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -235,11 +142,11 @@ DROP TABLE IF EXISTS `failed_jobs`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `failed_jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
@@ -263,13 +170,13 @@ DROP TABLE IF EXISTS `job_batches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `job_batches` (
-  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `total_jobs` int NOT NULL,
   `pending_jobs` int NOT NULL,
   `failed_jobs` int NOT NULL,
-  `failed_job_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `options` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` mediumtext COLLATE utf8mb4_unicode_ci,
   `cancelled_at` int DEFAULT NULL,
   `created_at` int NOT NULL,
   `finished_at` int DEFAULT NULL,
@@ -295,8 +202,8 @@ DROP TABLE IF EXISTS `jobs`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `queue` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `attempts` smallint unsigned NOT NULL,
   `reserved_at` int unsigned DEFAULT NULL,
   `available_at` int unsigned NOT NULL,
@@ -316,36 +223,6 @@ LOCK TABLES `jobs` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `messages`
---
-
-DROP TABLE IF EXISTS `messages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `messages` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `read_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `messages`
---
-
-LOCK TABLES `messages` WRITE;
-/*!40000 ALTER TABLE `messages` DISABLE KEYS */;
-/*!40000 ALTER TABLE `messages` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `migrations`
 --
 
@@ -354,10 +231,10 @@ DROP TABLE IF EXISTS `migrations`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -366,38 +243,8 @@ CREATE TABLE `migrations` (
 
 LOCK TABLES `migrations` WRITE;
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES (1,'0001_01_01_000000_create_users_table',1),(2,'0001_01_01_000001_create_cache_table',1),(3,'0001_01_01_000002_create_jobs_table',1),(4,'2026_05_08_130333_create_products_table',1),(5,'2026_06_14_000001_create_brands_table',1),(6,'2026_06_14_000002_create_categories_table',1),(7,'2026_06_14_000003_update_products_table',1),(8,'2026_06_14_000004_create_banners_table',1),(9,'2026_06_14_000005_create_wishlists_table',1),(10,'2026_06_14_000006_create_product_reviews_table',1),(11,'2026_06_14_000007_create_coupons_table',1),(12,'2026_06_14_000008_create_shippings_table',1),(13,'2026_06_14_000009_create_carts_table',1),(14,'2026_06_14_000010_create_orders_table',1),(15,'2026_06_14_000011_create_messages_table',1),(16,'2026_06_14_000012_create_notifications_table',1),(17,'2026_06_26_174549_create_order_items_table',2),(18,'2026_06_26_193104_add_address_fields_to_users_table',3);
+INSERT INTO `migrations` VALUES (1,'0001_01_01_000000_create_users_table',1),(2,'0001_01_01_000001_create_cache_table',1),(3,'0001_01_01_000002_create_jobs_table',1),(4,'2026_06_14_000002_create_categories_table',1),(5,'2026_06_14_000005_create_products_table',1),(6,'2026_06_14_000010_create_orders_table',1),(7,'2026_06_26_174549_create_order_items_table',1),(8,'2026_06_27_000000_create_admins_table',1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `notifications`
---
-
-DROP TABLE IF EXISTS `notifications`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `notifications` (
-  `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `notifiable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `notifiable_id` bigint unsigned NOT NULL,
-  `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `read_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `notifications_notifiable_type_notifiable_id_index` (`notifiable_type`,`notifiable_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `notifications`
---
-
-LOCK TABLES `notifications` WRITE;
-/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
-/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -421,7 +268,7 @@ CREATE TABLE `order_items` (
   KEY `order_items_product_id_foreign` (`product_id`),
   CONSTRAINT `order_items_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
   CONSTRAINT `order_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -430,7 +277,6 @@ CREATE TABLE `order_items` (
 
 LOCK TABLES `order_items` WRITE;
 /*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
-INSERT INTO `order_items` VALUES (1,1,1,1800000.00,1,1800000.00,'2026-06-26 11:24:05','2026-06-26 11:24:05');
 /*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -443,33 +289,31 @@ DROP TABLE IF EXISTS `orders`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orders` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `order_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `order_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint unsigned DEFAULT NULL,
   `sub_total` decimal(10,2) NOT NULL,
-  `shipping_id` bigint unsigned DEFAULT NULL,
-  `coupon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_cost` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `coupon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `total_amount` decimal(10,2) NOT NULL,
   `quantity` int NOT NULL DEFAULT '0',
-  `payment_method` enum('cod','paypal','card','bank_transfer') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'cod',
-  `payment_status` enum('unpaid','paid','failed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unpaid',
-  `status` enum('new','process','shipped','delivered','cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'new',
-  `first_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `country` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `post_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address1` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `address2` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `payment_method` enum('cod','paypal','card','bank_transfer') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'cod',
+  `payment_status` enum('unpaid','paid','failed') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unpaid',
+  `status` enum('new','process','shipped','delivered','cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'new',
+  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `post_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address1` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address2` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `orders_order_number_unique` (`order_number`),
   KEY `orders_user_id_foreign` (`user_id`),
-  KEY `orders_shipping_id_foreign` (`shipping_id`),
-  CONSTRAINT `orders_shipping_id_foreign` FOREIGN KEY (`shipping_id`) REFERENCES `shippings` (`id`) ON DELETE SET NULL,
   CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -478,7 +322,6 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,'DP-20260626-DZJ4',2,1800000.00,NULL,NULL,1800000.00,1,'bank_transfer','unpaid','new','AdminTest','Diena ParfumUser','admin@dienaparfum.com','08123456789','Indonesia','12345','Jl. Test No. 123, Jakarta',NULL,'2026-06-26 11:24:05','2026-06-26 11:24:05');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -490,8 +333,8 @@ DROP TABLE IF EXISTS `password_reset_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -507,39 +350,6 @@ LOCK TABLES `password_reset_tokens` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `product_reviews`
---
-
-DROP TABLE IF EXISTS `product_reviews`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `product_reviews` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `product_id` bigint unsigned NOT NULL,
-  `user_id` bigint unsigned NOT NULL,
-  `rating` int NOT NULL DEFAULT '5',
-  `comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'inactive',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `product_reviews_product_id_foreign` (`product_id`),
-  KEY `product_reviews_user_id_foreign` (`user_id`),
-  CONSTRAINT `product_reviews_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `product_reviews_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `product_reviews`
---
-
-LOCK TABLES `product_reviews` WRITE;
-/*!40000 ALTER TABLE `product_reviews` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product_reviews` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `products`
 --
 
@@ -548,31 +358,28 @@ DROP TABLE IF EXISTS `products`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `products` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `summary` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `price` int NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `summary` text COLLATE utf8mb4_unicode_ci,
+  `price` decimal(10,2) NOT NULL,
   `original_price` decimal(10,2) DEFAULT NULL,
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sku` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
-  `added_by` bigint unsigned DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `photo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `stock` int NOT NULL DEFAULT '0',
   `category_id` bigint unsigned DEFAULT NULL,
-  `brand_id` bigint unsigned DEFAULT NULL,
+  `sku` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('active','inactive') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `added_by` bigint unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `products_slug_unique` (`slug`),
   UNIQUE KEY `products_sku_unique` (`sku`),
   KEY `products_category_id_foreign` (`category_id`),
-  KEY `products_brand_id_foreign` (`brand_id`),
-  CONSTRAINT `products_brand_id_foreign` FOREIGN KEY (`brand_id`) REFERENCES `brands` (`id`) ON DELETE SET NULL,
   CONSTRAINT `products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -581,7 +388,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'Diena Parfume | Orchid & Midnight Jasmine','Orchid & Midnight Jasmine','orchid-midnight-jasmine','A masterfully crafted signature scent by Diena Parfume, blending top notes of Jasmine with base notes of Rose for a truly unique and unforgettable experience.','Premium Orchid & Midnight Jasmine by Diena Parfume',1800000,2286000.00,'/images/elysian_scent.png','/images/elysian_scent.png','DIENA-YSBQ6H','active',NULL,7,2,7,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(2,'Diena Parfume | Ancient Agarwood','Ancient Agarwood','ancient-agarwood','A masterfully crafted signature scent by Diena Parfume, blending top notes of Ylang-Ylang with base notes of Rose for a truly unique and unforgettable experience.','Premium Ancient Agarwood by Diena Parfume',2400000,2808000.00,'/images/oud_imperial.png','/images/oud_imperial.png','DIENA-3BHF1X','active',NULL,19,1,4,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(3,'Diena Parfume | Amber & Black Pepper','Amber & Black Pepper','amber-black-pepper','A masterfully crafted signature scent by Diena Parfume, blending top notes of Ylang-Ylang with base notes of Leather for a truly unique and unforgettable experience.','Premium Amber & Black Pepper by Diena Parfume',4100000,5945000.00,'/images/midnight_rose.png','/images/midnight_rose.png','DIENA-SM2NOX','active',NULL,24,2,4,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(4,'Diena Parfume | Sandalwood & Cacao','Sandalwood & Cacao','sandalwood-cacao','A masterfully crafted signature scent by Diena Parfume, blending top notes of Vanilla with base notes of Tonka Bean for a truly unique and unforgettable experience.','Premium Sandalwood & Cacao by Diena Parfume',5900000,7375000.00,'/images/santal_majuscule.png','/images/santal_majuscule.png','DIENA-MUZYOC','active',NULL,5,1,5,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(5,'Diena Parfume | Silver Reflections','Silver Reflections','silver-reflections','A masterfully crafted signature scent by Diena Parfume, blending top notes of Oud with base notes of Sandalwood for a truly unique and unforgettable experience.','Premium Silver Reflections by Diena Parfume',2900000,3944000.00,'/images/noir_crystal.png','/images/noir_crystal.png','DIENA-MP1WQQ','active',NULL,16,2,8,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(6,'Diena Parfume | Carrara Legacy','Carrara Legacy','carrara-legacy','A masterfully crafted signature scent by Diena Parfume, blending top notes of Cardamom with base notes of Bergamot for a truly unique and unforgettable experience.','Premium Carrara Legacy by Diena Parfume',5000000,7450000.00,'/images/royal_gold.png','/images/royal_gold.png','DIENA-9R2CIK','active',NULL,8,1,6,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(7,'Diena Parfume | Crimson Silk','Crimson Silk','crimson-silk','A masterfully crafted signature scent by Diena Parfume, blending top notes of Patchouli with base notes of Oud for a truly unique and unforgettable experience.','Premium Crimson Silk by Diena Parfume',3300000,4488000.00,'/images/rose_velvet.png','/images/rose_velvet.png','DIENA-3INOXX','active',NULL,25,2,3,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(8,'Diena Parfume | Morning Stone','Morning Stone','morning-stone','A masterfully crafted signature scent by Diena Parfume, blending top notes of Oud with base notes of Musk for a truly unique and unforgettable experience.','Premium Morning Stone by Diena Parfume',2600000,2886000.00,'/images/ocean_breeze.png','/images/ocean_breeze.png','DIENA-56ER2M','active',NULL,10,1,1,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(9,'Diena Parfume | Misty Emerald','Misty Emerald','misty-emerald','A masterfully crafted signature scent by Diena Parfume, blending top notes of Leather with base notes of Oud for a truly unique and unforgettable experience.','Premium Misty Emerald by Diena Parfume',4100000,5986000.00,'/images/forest_essence.png','/images/forest_essence.png','DIENA-IDUQQO','active',NULL,14,2,1,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(10,'Diena Parfume | Teardrop Horizon','Teardrop Horizon','teardrop-horizon','A masterfully crafted signature scent by Diena Parfume, blending top notes of Oud with base notes of Jasmine for a truly unique and unforgettable experience.','Premium Teardrop Horizon by Diena Parfume',3600000,4176000.00,'/images/amber_sun.png','/images/amber_sun.png','DIENA-VBKKE0','active',NULL,21,1,8,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(11,'Diena Parfume | Violet Lavender','Violet Lavender','violet-lavender','A masterfully crafted signature scent by Diena Parfume, blending top notes of Ylang-Ylang with base notes of Ylang-Ylang for a truly unique and unforgettable experience.','Premium Violet Lavender by Diena Parfume',2100000,2898000.00,'/images/midnight_lavender.png','/images/midnight_lavender.png','DIENA-S602SZ','active',NULL,17,2,2,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(12,'Diena Parfume | Imperial Elixir','Imperial Elixir','imperial-elixir','A masterfully crafted signature scent by Diena Parfume, blending top notes of Patchouli with base notes of Ylang-Ylang for a truly unique and unforgettable experience.','Premium Imperial Elixir by Diena Parfume',5300000,5830000.00,'/images/elysian_scent.png','/images/elysian_scent.png','DIENA-NMRMAH','active',NULL,15,1,3,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(13,'Diena Parfume | Celestial Aura','Celestial Aura','celestial-aura','A masterfully crafted signature scent by Diena Parfume, blending top notes of Rose with base notes of Vanilla for a truly unique and unforgettable experience.','Premium Celestial Aura by Diena Parfume',2300000,2553000.00,'/images/oud_imperial.png','/images/oud_imperial.png','DIENA-VQ9AAN','active',NULL,18,2,5,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(14,'Diena Parfume | Velvet Soul','Velvet Soul','velvet-soul','A masterfully crafted signature scent by Diena Parfume, blending top notes of Tonka Bean with base notes of Musk for a truly unique and unforgettable experience.','Premium Velvet Soul by Diena Parfume',3100000,4588000.00,'/images/midnight_rose.png','/images/midnight_rose.png','DIENA-ZTZFO2','active',NULL,25,1,1,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(15,'Diena Parfume | Divine Dreams','Divine Dreams','divine-dreams','A masterfully crafted signature scent by Diena Parfume, blending top notes of Patchouli with base notes of Musk for a truly unique and unforgettable experience.','Premium Divine Dreams by Diena Parfume',1800000,2268000.00,'/images/santal_majuscule.png','/images/santal_majuscule.png','DIENA-BDCHRU','active',NULL,15,2,7,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(16,'Diena Parfume | Radiant Spirit','Radiant Spirit','radiant-spirit','A masterfully crafted signature scent by Diena Parfume, blending top notes of Ylang-Ylang with base notes of Musk for a truly unique and unforgettable experience.','Premium Radiant Spirit by Diena Parfume',3800000,4484000.00,'/images/noir_crystal.png','/images/noir_crystal.png','DIENA-JNQTH7','active',NULL,7,1,5,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(17,'Diena Parfume | Sacred Grace','Sacred Grace','sacred-grace','A masterfully crafted signature scent by Diena Parfume, blending top notes of Tonka Bean with base notes of Cardamom for a truly unique and unforgettable experience.','Premium Sacred Grace by Diena Parfume',5400000,7128000.00,'/images/royal_gold.png','/images/royal_gold.png','DIENA-A9BU2J','active',NULL,24,2,3,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(18,'Diena Parfume | Infinite Light','Infinite Light','infinite-light','A masterfully crafted signature scent by Diena Parfume, blending top notes of Vanilla with base notes of Rose for a truly unique and unforgettable experience.','Premium Infinite Light by Diena Parfume',3600000,5040000.00,'/images/rose_velvet.png','/images/rose_velvet.png','DIENA-TCAKPP','active',NULL,16,1,4,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(19,'Diena Parfume | Royal Scent','Royal Scent','royal-scent','A masterfully crafted signature scent by Diena Parfume, blending top notes of Musk with base notes of Musk for a truly unique and unforgettable experience.','Premium Royal Scent by Diena Parfume',2400000,2712000.00,'/images/ocean_breeze.png','/images/ocean_breeze.png','DIENA-99MUWO','active',NULL,13,2,1,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(20,'Diena Parfume | Pure Mist','Pure Mist','pure-mist','A masterfully crafted signature scent by Diena Parfume, blending top notes of Oud with base notes of Musk for a truly unique and unforgettable experience.','Premium Pure Mist by Diena Parfume',5000000,6450000.00,'/images/forest_essence.png','/images/forest_essence.png','DIENA-NQFA7P','active',NULL,9,1,8,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(21,'Diena Parfume | Midnight Glow','Midnight Glow','midnight-glow','A masterfully crafted signature scent by Diena Parfume, blending top notes of Neroli with base notes of Cardamom for a truly unique and unforgettable experience.','Premium Midnight Glow by Diena Parfume',3900000,4329000.00,'/images/amber_sun.png','/images/amber_sun.png','DIENA-MTGRN7','active',NULL,9,2,2,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(22,'Diena Parfume | Golden Heart','Golden Heart','golden-heart','A masterfully crafted signature scent by Diena Parfume, blending top notes of Oud with base notes of Ylang-Ylang for a truly unique and unforgettable experience.','Premium Golden Heart by Diena Parfume',5600000,7392000.00,'/images/midnight_lavender.png','/images/midnight_lavender.png','DIENA-YIW1ML','active',NULL,12,1,3,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(23,'Diena Parfume | Mystic Essence','Mystic Essence','mystic-essence','A masterfully crafted signature scent by Diena Parfume, blending top notes of Vanilla with base notes of Leather for a truly unique and unforgettable experience.','Premium Mystic Essence by Diena Parfume',2700000,3375000.00,'/images/elysian_scent.png','/images/elysian_scent.png','DIENA-PUSX9Q','active',NULL,23,2,1,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(24,'Diena Parfume | Bergamot Noir','Bergamot Noir','bergamot-noir','A masterfully crafted signature scent by Diena Parfume, blending top notes of Sandalwood with base notes of Tonka Bean for a truly unique and unforgettable experience.','Premium Bergamot Noir by Diena Parfume',2400000,3072000.00,'/images/oud_imperial.png','/images/oud_imperial.png','DIENA-OOIZZC','active',NULL,17,1,1,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(25,'Diena Parfume | Neroli Bloom','Neroli Bloom','neroli-bloom','A masterfully crafted signature scent by Diena Parfume, blending top notes of Jasmine with base notes of Oud for a truly unique and unforgettable experience.','Premium Neroli Bloom by Diena Parfume',4700000,6486000.00,'/images/midnight_rose.png','/images/midnight_rose.png','DIENA-2XC9MS','active',NULL,9,2,4,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(26,'Diena Parfume | Vetiver Smoke','Vetiver Smoke','vetiver-smoke','A masterfully crafted signature scent by Diena Parfume, blending top notes of Jasmine with base notes of Bergamot for a truly unique and unforgettable experience.','Premium Vetiver Smoke by Diena Parfume',3800000,5396000.00,'/images/santal_majuscule.png','/images/santal_majuscule.png','DIENA-3665NS','active',NULL,16,1,3,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(27,'Diena Parfume | Cardamom Spice','Cardamom Spice','cardamom-spice','A masterfully crafted signature scent by Diena Parfume, blending top notes of Patchouli with base notes of Vetiver for a truly unique and unforgettable experience.','Premium Cardamom Spice by Diena Parfume',5100000,7242000.00,'/images/noir_crystal.png','/images/noir_crystal.png','DIENA-WKXLES','active',NULL,20,2,8,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(28,'Diena Parfume | Tonka Vanilla','Tonka Vanilla','tonka-vanilla','A masterfully crafted signature scent by Diena Parfume, blending top notes of Bergamot with base notes of Vetiver for a truly unique and unforgettable experience.','Premium Tonka Vanilla by Diena Parfume',3300000,3894000.00,'/images/royal_gold.png','/images/royal_gold.png','DIENA-VIINNL','active',NULL,8,1,7,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(29,'Diena Parfume | Leather Oud','Leather Oud','leather-oud','A masterfully crafted signature scent by Diena Parfume, blending top notes of Vetiver with base notes of Sandalwood for a truly unique and unforgettable experience.','Premium Leather Oud by Diena Parfume',2100000,2814000.00,'/images/rose_velvet.png','/images/rose_velvet.png','DIENA-ZW52XY','active',NULL,25,2,5,'2026-06-14 01:35:01','2026-06-14 01:35:01'),(30,'Diena Parfume | Rose Absolute','Rose Absolute','rose-absolute','A masterfully crafted signature scent by Diena Parfume, blending top notes of Patchouli with base notes of Bergamot for a truly unique and unforgettable experience.','Premium Rose Absolute by Diena Parfume',4400000,5632000.00,'/images/ocean_breeze.png','/images/ocean_breeze.png','DIENA-YWF3RA','active',NULL,17,1,1,'2026-06-14 01:35:01','2026-06-14 01:35:01');
+INSERT INTO `products` VALUES (1,'Diena Parfume | Orchid & Midnight Jasmine','Orchid & Midnight Jasmine','orchid-midnight-jasmine','A masterfully crafted signature scent by Diena Parfume, blending top notes of Vetiver with base notes of Neroli for a truly unique and unforgettable experience.','Premium Orchid & Midnight Jasmine by Diena Parfume',3300000.00,4587000.00,'/images/elysian_scent.png','/images/elysian_scent.png',13,2,'DIENA-MQQJPI','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(2,'Diena Parfume | Ancient Agarwood','Ancient Agarwood','ancient-agarwood','A masterfully crafted signature scent by Diena Parfume, blending top notes of Tonka Bean with base notes of Vetiver for a truly unique and unforgettable experience.','Premium Ancient Agarwood by Diena Parfume',3000000.00,3780000.00,'/images/oud_imperial.png','/images/oud_imperial.png',14,1,'DIENA-WUVBCE','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(3,'Diena Parfume | Amber & Black Pepper','Amber & Black Pepper','amber-black-pepper','A masterfully crafted signature scent by Diena Parfume, blending top notes of Jasmine with base notes of Bergamot for a truly unique and unforgettable experience.','Premium Amber & Black Pepper by Diena Parfume',5000000.00,5850000.00,'/images/midnight_rose.png','/images/midnight_rose.png',22,3,'DIENA-VU3UQX','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(4,'Diena Parfume | Sandalwood & Cacao','Sandalwood & Cacao','sandalwood-cacao','A masterfully crafted signature scent by Diena Parfume, blending top notes of Leather with base notes of Oud for a truly unique and unforgettable experience.','Premium Sandalwood & Cacao by Diena Parfume',2800000.00,3752000.00,'/images/santal_majuscule.png','/images/santal_majuscule.png',7,2,'DIENA-6GU2H0','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(5,'Diena Parfume | Silver Reflections','Silver Reflections','silver-reflections','A masterfully crafted signature scent by Diena Parfume, blending top notes of Cardamom with base notes of Patchouli for a truly unique and unforgettable experience.','Premium Silver Reflections by Diena Parfume',2000000.00,2860000.00,'/images/noir_crystal.png','/images/noir_crystal.png',16,1,'DIENA-7XCWBX','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(6,'Diena Parfume | Carrara Legacy','Carrara Legacy','carrara-legacy','A masterfully crafted signature scent by Diena Parfume, blending top notes of Leather with base notes of Vanilla for a truly unique and unforgettable experience.','Premium Carrara Legacy by Diena Parfume',2600000.00,3302000.00,'/images/royal_gold.png','/images/royal_gold.png',11,3,'DIENA-EBUFZK','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(7,'Diena Parfume | Crimson Silk','Crimson Silk','crimson-silk','A masterfully crafted signature scent by Diena Parfume, blending top notes of Ylang-Ylang with base notes of Ylang-Ylang for a truly unique and unforgettable experience.','Premium Crimson Silk by Diena Parfume',2500000.00,3150000.00,'/images/rose_velvet.png','/images/rose_velvet.png',22,2,'DIENA-X53EO6','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(8,'Diena Parfume | Morning Stone','Morning Stone','morning-stone','A masterfully crafted signature scent by Diena Parfume, blending top notes of Patchouli with base notes of Cardamom for a truly unique and unforgettable experience.','Premium Morning Stone by Diena Parfume',3800000.00,4522000.00,'/images/ocean_breeze.png','/images/ocean_breeze.png',18,1,'DIENA-V0BQEE','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(9,'Diena Parfume | Misty Emerald','Misty Emerald','misty-emerald','A masterfully crafted signature scent by Diena Parfume, blending top notes of Patchouli with base notes of Jasmine for a truly unique and unforgettable experience.','Premium Misty Emerald by Diena Parfume',3700000.00,5106000.00,'/images/forest_essence.png','/images/forest_essence.png',15,3,'DIENA-XEQ9TT','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(10,'Diena Parfume | Teardrop Horizon','Teardrop Horizon','teardrop-horizon','A masterfully crafted signature scent by Diena Parfume, blending top notes of Neroli with base notes of Vanilla for a truly unique and unforgettable experience.','Premium Teardrop Horizon by Diena Parfume',4600000.00,6854000.00,'/images/amber_sun.png','/images/amber_sun.png',16,2,'DIENA-YGGZLA','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(11,'Diena Parfume | Violet Lavender','Violet Lavender','violet-lavender','A masterfully crafted signature scent by Diena Parfume, blending top notes of Ylang-Ylang with base notes of Neroli for a truly unique and unforgettable experience.','Premium Violet Lavender by Diena Parfume',4300000.00,4773000.00,'/images/midnight_lavender.png','/images/midnight_lavender.png',19,1,'DIENA-FLX1DO','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(12,'Diena Parfume | Imperial Elixir','Imperial Elixir','imperial-elixir','A masterfully crafted signature scent by Diena Parfume, blending top notes of Tonka Bean with base notes of Neroli for a truly unique and unforgettable experience.','Premium Imperial Elixir by Diena Parfume',5400000.00,6696000.00,'/images/elysian_scent.png','/images/elysian_scent.png',9,3,'DIENA-GYRSQP','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(13,'Diena Parfume | Celestial Aura','Celestial Aura','celestial-aura','A masterfully crafted signature scent by Diena Parfume, blending top notes of Musk with base notes of Musk for a truly unique and unforgettable experience.','Premium Celestial Aura by Diena Parfume',4600000.00,6302000.00,'/images/oud_imperial.png','/images/oud_imperial.png',22,2,'DIENA-GTV5GH','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(14,'Diena Parfume | Velvet Soul','Velvet Soul','velvet-soul','A masterfully crafted signature scent by Diena Parfume, blending top notes of Rose with base notes of Ylang-Ylang for a truly unique and unforgettable experience.','Premium Velvet Soul by Diena Parfume',4100000.00,6150000.00,'/images/midnight_rose.png','/images/midnight_rose.png',12,1,'DIENA-1KC1JK','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(15,'Diena Parfume | Divine Dreams','Divine Dreams','divine-dreams','A masterfully crafted signature scent by Diena Parfume, blending top notes of Vetiver with base notes of Patchouli for a truly unique and unforgettable experience.','Premium Divine Dreams by Diena Parfume',4700000.00,6909000.00,'/images/santal_majuscule.png','/images/santal_majuscule.png',23,3,'DIENA-PXCO7Y','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(16,'Diena Parfume | Radiant Spirit','Radiant Spirit','radiant-spirit','A masterfully crafted signature scent by Diena Parfume, blending top notes of Cardamom with base notes of Cardamom for a truly unique and unforgettable experience.','Premium Radiant Spirit by Diena Parfume',2400000.00,3576000.00,'/images/noir_crystal.png','/images/noir_crystal.png',9,2,'DIENA-IRPN2D','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(17,'Diena Parfume | Sacred Grace','Sacred Grace','sacred-grace','A masterfully crafted signature scent by Diena Parfume, blending top notes of Tonka Bean with base notes of Neroli for a truly unique and unforgettable experience.','Premium Sacred Grace by Diena Parfume',5900000.00,8496000.00,'/images/royal_gold.png','/images/royal_gold.png',25,1,'DIENA-LMOQXU','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(18,'Diena Parfume | Infinite Light','Infinite Light','infinite-light','A masterfully crafted signature scent by Diena Parfume, blending top notes of Ylang-Ylang with base notes of Patchouli for a truly unique and unforgettable experience.','Premium Infinite Light by Diena Parfume',3300000.00,4290000.00,'/images/rose_velvet.png','/images/rose_velvet.png',18,3,'DIENA-EQB8TP','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(19,'Diena Parfume | Royal Scent','Royal Scent','royal-scent','A masterfully crafted signature scent by Diena Parfume, blending top notes of Tonka Bean with base notes of Oud for a truly unique and unforgettable experience.','Premium Royal Scent by Diena Parfume',4200000.00,4830000.00,'/images/ocean_breeze.png','/images/ocean_breeze.png',12,2,'DIENA-PSY1EW','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(20,'Diena Parfume | Pure Mist','Pure Mist','pure-mist','A masterfully crafted signature scent by Diena Parfume, blending top notes of Sandalwood with base notes of Rose for a truly unique and unforgettable experience.','Premium Pure Mist by Diena Parfume',2500000.00,2900000.00,'/images/forest_essence.png','/images/forest_essence.png',18,1,'DIENA-IAZBJ0','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(21,'Diena Parfume | Midnight Glow','Midnight Glow','midnight-glow','A masterfully crafted signature scent by Diena Parfume, blending top notes of Tonka Bean with base notes of Bergamot for a truly unique and unforgettable experience.','Premium Midnight Glow by Diena Parfume',1900000.00,2508000.00,'/images/amber_sun.png','/images/amber_sun.png',5,3,'DIENA-VJGSKG','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(22,'Diena Parfume | Golden Heart','Golden Heart','golden-heart','A masterfully crafted signature scent by Diena Parfume, blending top notes of Leather with base notes of Ylang-Ylang for a truly unique and unforgettable experience.','Premium Golden Heart by Diena Parfume',6000000.00,8340000.00,'/images/midnight_lavender.png','/images/midnight_lavender.png',5,2,'DIENA-BZ3VCU','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(23,'Diena Parfume | Mystic Essence','Mystic Essence','mystic-essence','A masterfully crafted signature scent by Diena Parfume, blending top notes of Patchouli with base notes of Leather for a truly unique and unforgettable experience.','Premium Mystic Essence by Diena Parfume',2700000.00,2970000.00,'/images/elysian_scent.png','/images/elysian_scent.png',20,1,'DIENA-76OIS5','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(24,'Diena Parfume | Bergamot Noir','Bergamot Noir','bergamot-noir','A masterfully crafted signature scent by Diena Parfume, blending top notes of Tonka Bean with base notes of Jasmine for a truly unique and unforgettable experience.','Premium Bergamot Noir by Diena Parfume',4100000.00,5494000.00,'/images/oud_imperial.png','/images/oud_imperial.png',5,3,'DIENA-PM9CWB','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(25,'Diena Parfume | Neroli Bloom','Neroli Bloom','neroli-bloom','A masterfully crafted signature scent by Diena Parfume, blending top notes of Musk with base notes of Oud for a truly unique and unforgettable experience.','Premium Neroli Bloom by Diena Parfume',2600000.00,3562000.00,'/images/midnight_rose.png','/images/midnight_rose.png',6,2,'DIENA-ODSBRD','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(26,'Diena Parfume | Vetiver Smoke','Vetiver Smoke','vetiver-smoke','A masterfully crafted signature scent by Diena Parfume, blending top notes of Jasmine with base notes of Patchouli for a truly unique and unforgettable experience.','Premium Vetiver Smoke by Diena Parfume',6000000.00,8880000.00,'/images/santal_majuscule.png','/images/santal_majuscule.png',23,1,'DIENA-B0W7JG','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(27,'Diena Parfume | Cardamom Spice','Cardamom Spice','cardamom-spice','A masterfully crafted signature scent by Diena Parfume, blending top notes of Ylang-Ylang with base notes of Rose for a truly unique and unforgettable experience.','Premium Cardamom Spice by Diena Parfume',1900000.00,2793000.00,'/images/noir_crystal.png','/images/noir_crystal.png',12,3,'DIENA-TTYO2W','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(28,'Diena Parfume | Tonka Vanilla','Tonka Vanilla','tonka-vanilla','A masterfully crafted signature scent by Diena Parfume, blending top notes of Bergamot with base notes of Rose for a truly unique and unforgettable experience.','Premium Tonka Vanilla by Diena Parfume',2900000.00,3596000.00,'/images/royal_gold.png','/images/royal_gold.png',20,2,'DIENA-FAVIJG','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(29,'Diena Parfume | Leather Oud','Leather Oud','leather-oud','A masterfully crafted signature scent by Diena Parfume, blending top notes of Rose with base notes of Leather for a truly unique and unforgettable experience.','Premium Leather Oud by Diena Parfume',3700000.00,4736000.00,'/images/rose_velvet.png','/images/rose_velvet.png',12,1,'DIENA-TM1AGY','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50'),(30,'Diena Parfume | Rose Absolute','Rose Absolute','rose-absolute','A masterfully crafted signature scent by Diena Parfume, blending top notes of Bergamot with base notes of Sandalwood for a truly unique and unforgettable experience.','Premium Rose Absolute by Diena Parfume',2800000.00,3640000.00,'/images/ocean_breeze.png','/images/ocean_breeze.png',19,3,'DIENA-F3W859','active',NULL,'2026-06-28 06:00:50','2026-06-28 06:00:50');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -593,11 +400,11 @@ DROP TABLE IF EXISTS `sessions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sessions` (
-  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint unsigned DEFAULT NULL,
-  `ip_address` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_agent` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_activity` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sessions_user_id_index` (`user_id`),
@@ -611,37 +418,8 @@ CREATE TABLE `sessions` (
 
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-INSERT INTO `sessions` VALUES ('bR6tIEGOgik5tQHqBOP1Bg3cx0WXPDqfRzxbQ5yi',NULL,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36','eyJfdG9rZW4iOiI5OVMxWEQ2dmJwek1ZYU1WZndiWGdlVWZGUDFyMzJLRGtqUnVaSkhzIiwidXJsIjp7ImludGVuZGVkIjoiaHR0cDpcL1wvbG9jYWxob3N0OjgwMDBcL2FkbWluIn0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfX0=',1782539787),('N0RYxhAOQ3fzEEYFJdLcSrMUVfqT8Y8mOtxwyv2h',NULL,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36','eyJfdG9rZW4iOiJsSzRJN3duQkRjb3p3VWNPQVJqejhjMWl3Y3pZSXJ5VHdMOGowSTRQIiwidXJsIjp7ImludGVuZGVkIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL2FkbWluIn0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfSwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9hZG1pblwvbG9naW4iLCJyb3V0ZSI6ImZpbGFtZW50LmFkbWluLmF1dGgubG9naW4ifX0=',1782539489),('Ql2H2TMIkR4Zwn2ZiGihDCswuB35GGmGxpFVFEkE',NULL,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36','eyJfdG9rZW4iOiJyTDlvcTZGTnp0ZXFnOHplamgyeDJEdjR4alM2MUhZbWcwTzFtbnBjIiwidXJsIjp7ImludGVuZGVkIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL2FkbWluIn0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfSwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9hZG1pblwvbG9naW4iLCJyb3V0ZSI6ImZpbGFtZW50LmFkbWluLmF1dGgubG9naW4ifX0=',1782539797),('soItMRJAH0tWdQCd6xINUNnQTB2weRdkph2rLukD',NULL,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36','eyJfdG9rZW4iOiJXNzdMbm9tU01qNXd1QmZMTWZJU3pYRW5Kdlc2YkVrWVgycmthaUlrIiwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL2FkbWluXC9sb2dpbiIsInJvdXRlIjoiZmlsYW1lbnQuYWRtaW4uYXV0aC5sb2dpbiJ9fQ==',1782540008),('sYDmyo2Qgyzoy2Vmit0sh4rYOLMtOjDs8FTkTKBp',4,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36','eyJfdG9rZW4iOiJuQXV0YkpOaGdtVVVaR3RESm1pclR0MW5PSmViZzVpaUpmRmNUQXR6IiwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvbG9jYWxob3N0OjgwMDBcL2FkbWluIiwicm91dGUiOiJmaWxhbWVudC5hZG1pbi5wYWdlcy5kYXNoYm9hcmQifSwibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiOjQsInBhc3N3b3JkX2hhc2hfd2ViIjoiN2E5NWI0MzdjM2I1YmUxNmUxNGZiZmVjMzEwYjRkZGFlYjkxOThlNGUxZjg1MmZjNjliMTE5NDM3Y2FkZGE4MCIsInRhYmxlcyI6eyIyYWZhZDQ0Y2YzYzk1YmY0MGZlNWNmMjQ2MTQzZmJkZl9jb2x1bW5zIjpbeyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6Im9yZGVyX251bWJlciIsImxhYmVsIjoiTm8uIFBlc2FuYW4iLCJpc0hpZGRlbiI6ZmFsc2UsImlzVG9nZ2xlZCI6dHJ1ZSwiaXNUb2dnbGVhYmxlIjpmYWxzZSwiaXNUb2dnbGVkSGlkZGVuQnlEZWZhdWx0IjpudWxsfSx7InR5cGUiOiJjb2x1bW4iLCJuYW1lIjoiZmlyc3RfbmFtZSIsImxhYmVsIjoiUGVuZXJpbWEiLCJpc0hpZGRlbiI6ZmFsc2UsImlzVG9nZ2xlZCI6dHJ1ZSwiaXNUb2dnbGVhYmxlIjpmYWxzZSwiaXNUb2dnbGVkSGlkZGVuQnlEZWZhdWx0IjpudWxsfSx7InR5cGUiOiJjb2x1bW4iLCJuYW1lIjoicGhvbmUiLCJsYWJlbCI6IldoYXRzQXBwIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6InRvdGFsX2Ftb3VudCIsImxhYmVsIjoiVG90YWwiLCJpc0hpZGRlbiI6ZmFsc2UsImlzVG9nZ2xlZCI6dHJ1ZSwiaXNUb2dnbGVhYmxlIjpmYWxzZSwiaXNUb2dnbGVkSGlkZGVuQnlEZWZhdWx0IjpudWxsfSx7InR5cGUiOiJjb2x1bW4iLCJuYW1lIjoicGF5bWVudF9zdGF0dXMiLCJsYWJlbCI6IlBlbWJheWFyYW4iLCJpc0hpZGRlbiI6ZmFsc2UsImlzVG9nZ2xlZCI6dHJ1ZSwiaXNUb2dnbGVhYmxlIjpmYWxzZSwiaXNUb2dnbGVkSGlkZGVuQnlEZWZhdWx0IjpudWxsfSx7InR5cGUiOiJjb2x1bW4iLCJuYW1lIjoic3RhdHVzIiwibGFiZWwiOiJTdGF0dXMiLCJpc0hpZGRlbiI6ZmFsc2UsImlzVG9nZ2xlZCI6dHJ1ZSwiaXNUb2dnbGVhYmxlIjpmYWxzZSwiaXNUb2dnbGVkSGlkZGVuQnlEZWZhdWx0IjpudWxsfSx7InR5cGUiOiJjb2x1bW4iLCJuYW1lIjoiY3JlYXRlZF9hdCIsImxhYmVsIjoiV2FrdHUiLCJpc0hpZGRlbiI6ZmFsc2UsImlzVG9nZ2xlZCI6dHJ1ZSwiaXNUb2dnbGVhYmxlIjpmYWxzZSwiaXNUb2dnbGVkSGlkZGVuQnlEZWZhdWx0IjpudWxsfV19fQ==',1782541417),('tbzev9SQQA3cgyC8yNEh4Fyu2mh4zOl9l37AzhpH',NULL,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36','eyJfdG9rZW4iOiI1bXlhRFZ6UE5YRldhOVJyVTZrejlwdHk5anBUOTc3VUp1bXdSMkFtIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19',1782537538);
+INSERT INTO `sessions` VALUES ('a0e2IfHKPPfM2LMXuL2rrVzTMClSk5m9NjY1fMp0',1,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36','eyJfdG9rZW4iOiJjTDBoVkdld25ZWUdRMlR3WGFtQ1p2d3BaUlVISjVGSkRMZ1FTVFNKIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9hZG1pbiIsInJvdXRlIjoiZmlsYW1lbnQuYWRtaW4ucGFnZXMuZGFzaGJvYXJkIn0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfSwidXJsIjpbXSwibG9naW5fYWRtaW5fNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI6MSwicGFzc3dvcmRfaGFzaF9hZG1pbiI6IjJmNDQzYjUxMmUyMmI5MjU3NTk3MGZiMDkxN2JhZTczOWFmZGJmZjI4Njc2MGE5N2Y1ZGEwOTBmMzU4ZWEyNjUiLCJ0YWJsZXMiOnsiMmFmYWQ0NGNmM2M5NWJmNDBmZTVjZjI0NjE0M2ZiZGZfY29sdW1ucyI6W3sidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJvcmRlcl9udW1iZXIiLCJsYWJlbCI6Ik5vLiBQZXNhbmFuIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6ImZpcnN0X25hbWUiLCJsYWJlbCI6IlBlbmVyaW1hIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6InBob25lIiwibGFiZWwiOiJXaGF0c0FwcCIsImlzSGlkZGVuIjpmYWxzZSwiaXNUb2dnbGVkIjp0cnVlLCJpc1RvZ2dsZWFibGUiOmZhbHNlLCJpc1RvZ2dsZWRIaWRkZW5CeURlZmF1bHQiOm51bGx9LHsidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJ0b3RhbF9hbW91bnQiLCJsYWJlbCI6IlRvdGFsIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6InBheW1lbnRfc3RhdHVzIiwibGFiZWwiOiJQZW1iYXlhcmFuIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6InN0YXR1cyIsImxhYmVsIjoiU3RhdHVzIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6ImNyZWF0ZWRfYXQiLCJsYWJlbCI6Ildha3R1IiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH1dLCI4ZmFjNmViMWNlYzI2ODAzYjNmN2ZiNDQwYTI3MTExYl9jb2x1bW5zIjpbeyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6ImltYWdlIiwibGFiZWwiOiJGb3RvIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6Im5hbWUiLCJsYWJlbCI6Ik5hbWEgQXJvbWEiLCJpc0hpZGRlbiI6ZmFsc2UsImlzVG9nZ2xlZCI6dHJ1ZSwiaXNUb2dnbGVhYmxlIjpmYWxzZSwiaXNUb2dnbGVkSGlkZGVuQnlEZWZhdWx0IjpudWxsfSx7InR5cGUiOiJjb2x1bW4iLCJuYW1lIjoicHJpY2UiLCJsYWJlbCI6IkhhcmdhIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6InN0b2NrIiwibGFiZWwiOiJTdG9rIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6ImNhdGVnb3J5LnRpdGxlIiwibGFiZWwiOiJLYXRlZ29yaSIsImlzSGlkZGVuIjpmYWxzZSwiaXNUb2dnbGVkIjp0cnVlLCJpc1RvZ2dsZWFibGUiOmZhbHNlLCJpc1RvZ2dsZWRIaWRkZW5CeURlZmF1bHQiOm51bGx9LHsidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJjcmVhdGVkX2F0IiwibGFiZWwiOiJUZXJkYWZ0YXIgUGFkYSIsImlzSGlkZGVuIjpmYWxzZSwiaXNUb2dnbGVkIjpmYWxzZSwiaXNUb2dnbGVhYmxlIjp0cnVlLCJpc1RvZ2dsZWRIaWRkZW5CeURlZmF1bHQiOnRydWV9XSwiZGRjMWQwOGViZWZhNjUyMjkwM2FiMWYzN2MzY2I4YWNfY29sdW1ucyI6W3sidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJ0aXRsZSIsImxhYmVsIjoiTmFtYSBLYXRlZ29yaSIsImlzSGlkZGVuIjpmYWxzZSwiaXNUb2dnbGVkIjp0cnVlLCJpc1RvZ2dsZWFibGUiOmZhbHNlLCJpc1RvZ2dsZWRIaWRkZW5CeURlZmF1bHQiOm51bGx9LHsidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJzbHVnIiwibGFiZWwiOiJTbHVnIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6InBob3RvIiwibGFiZWwiOiJGb3RvIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6ImlzX3BhcmVudCIsImxhYmVsIjoiS2F0ZWdvcmkgVXRhbWEiLCJpc0hpZGRlbiI6ZmFsc2UsImlzVG9nZ2xlZCI6dHJ1ZSwiaXNUb2dnbGVhYmxlIjpmYWxzZSwiaXNUb2dnbGVkSGlkZGVuQnlEZWZhdWx0IjpudWxsfSx7InR5cGUiOiJjb2x1bW4iLCJuYW1lIjoicGFyZW50LnRpdGxlIiwibGFiZWwiOiJLYXRlZ29yaSBJbmR1ayIsImlzSGlkZGVuIjpmYWxzZSwiaXNUb2dnbGVkIjp0cnVlLCJpc1RvZ2dsZWFibGUiOmZhbHNlLCJpc1RvZ2dsZWRIaWRkZW5CeURlZmF1bHQiOm51bGx9LHsidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJzdGF0dXMiLCJsYWJlbCI6IlN0YXR1cyIsImlzSGlkZGVuIjpmYWxzZSwiaXNUb2dnbGVkIjp0cnVlLCJpc1RvZ2dsZWFibGUiOmZhbHNlLCJpc1RvZ2dsZWRIaWRkZW5CeURlZmF1bHQiOm51bGx9LHsidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJjcmVhdGVkX2F0IiwibGFiZWwiOiJDcmVhdGVkIGF0IiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOmZhbHNlLCJpc1RvZ2dsZWFibGUiOnRydWUsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6dHJ1ZX0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6InVwZGF0ZWRfYXQiLCJsYWJlbCI6IlVwZGF0ZWQgYXQiLCJpc0hpZGRlbiI6ZmFsc2UsImlzVG9nZ2xlZCI6ZmFsc2UsImlzVG9nZ2xlYWJsZSI6dHJ1ZSwiaXNUb2dnbGVkSGlkZGVuQnlEZWZhdWx0Ijp0cnVlfV0sImU3OTNhMjc5ZDU2ZTQ1MDYwOTc1NDAyMGQ2MjdiZWVjX2NvbHVtbnMiOlt7InR5cGUiOiJjb2x1bW4iLCJuYW1lIjoib3JkZXJfbnVtYmVyIiwibGFiZWwiOiJOby4gUGVzYW5hbiIsImlzSGlkZGVuIjpmYWxzZSwiaXNUb2dnbGVkIjp0cnVlLCJpc1RvZ2dsZWFibGUiOmZhbHNlLCJpc1RvZ2dsZWRIaWRkZW5CeURlZmF1bHQiOm51bGx9LHsidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJ1c2VyLm5hbWUiLCJsYWJlbCI6Ik5hbWEgQWt1biIsImlzSGlkZGVuIjpmYWxzZSwiaXNUb2dnbGVkIjp0cnVlLCJpc1RvZ2dsZWFibGUiOmZhbHNlLCJpc1RvZ2dsZWRIaWRkZW5CeURlZmF1bHQiOm51bGx9LHsidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJmaXJzdF9uYW1lIiwibGFiZWwiOiJOYW1hIFBlbmVyaW1hIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6InBob25lIiwibGFiZWwiOiJOby4gV2hhdHNBcHAiLCJpc0hpZGRlbiI6ZmFsc2UsImlzVG9nZ2xlZCI6dHJ1ZSwiaXNUb2dnbGVhYmxlIjpmYWxzZSwiaXNUb2dnbGVkSGlkZGVuQnlEZWZhdWx0IjpudWxsfSx7InR5cGUiOiJjb2x1bW4iLCJuYW1lIjoidG90YWxfYW1vdW50IiwibGFiZWwiOiJUb3RhbCBCYXlhciIsImlzSGlkZGVuIjpmYWxzZSwiaXNUb2dnbGVkIjp0cnVlLCJpc1RvZ2dsZWFibGUiOmZhbHNlLCJpc1RvZ2dsZWRIaWRkZW5CeURlZmF1bHQiOm51bGx9LHsidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJwYXltZW50X3N0YXR1cyIsImxhYmVsIjoiUGVtYmF5YXJhbiIsImlzSGlkZGVuIjpmYWxzZSwiaXNUb2dnbGVkIjp0cnVlLCJpc1RvZ2dsZWFibGUiOmZhbHNlLCJpc1RvZ2dsZWRIaWRkZW5CeURlZmF1bHQiOm51bGx9LHsidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJzdGF0dXMiLCJsYWJlbCI6IlN0YXR1cyBQZXNhbmFuIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6ImNyZWF0ZWRfYXQiLCJsYWJlbCI6Ildha3R1IFBlc2FuYW4iLCJpc0hpZGRlbiI6ZmFsc2UsImlzVG9nZ2xlZCI6dHJ1ZSwiaXNUb2dnbGVhYmxlIjpmYWxzZSwiaXNUb2dnbGVkSGlkZGVuQnlEZWZhdWx0IjpudWxsfV0sImU2NDQ4MzNmNGU0ZTA4NzEyMzE1ZGE3MWIzM2ZhY2QyX2NvbHVtbnMiOlt7InR5cGUiOiJjb2x1bW4iLCJuYW1lIjoibmFtZSIsImxhYmVsIjoiTmFtYSBMZW5na2FwIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6ImVtYWlsIiwibGFiZWwiOiJFbWFpbCIsImlzSGlkZGVuIjpmYWxzZSwiaXNUb2dnbGVkIjp0cnVlLCJpc1RvZ2dsZWFibGUiOmZhbHNlLCJpc1RvZ2dsZWRIaWRkZW5CeURlZmF1bHQiOm51bGx9LHsidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJwaG9uZSIsImxhYmVsIjoiTm9tb3IgVGVsZXBvbiIsImlzSGlkZGVuIjpmYWxzZSwiaXNUb2dnbGVkIjp0cnVlLCJpc1RvZ2dsZWFibGUiOmZhbHNlLCJpc1RvZ2dsZWRIaWRkZW5CeURlZmF1bHQiOm51bGx9LHsidHlwZSI6ImNvbHVtbiIsIm5hbWUiOiJwb3N0X2NvZGUiLCJsYWJlbCI6IktvZGUgUG9zIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOmZhbHNlLCJpc1RvZ2dsZWFibGUiOnRydWUsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6dHJ1ZX0seyJ0eXBlIjoiY29sdW1uIiwibmFtZSI6ImNyZWF0ZWRfYXQiLCJsYWJlbCI6IlRlcmRhZnRhciBQYWRhIiwiaXNIaWRkZW4iOmZhbHNlLCJpc1RvZ2dsZWQiOnRydWUsImlzVG9nZ2xlYWJsZSI6ZmFsc2UsImlzVG9nZ2xlZEhpZGRlbkJ5RGVmYXVsdCI6bnVsbH1dfX0=',1782653177);
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `shippings`
---
-
-DROP TABLE IF EXISTS `shippings`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `shippings` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `cost` decimal(10,2) NOT NULL,
-  `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `shippings`
---
-
-LOCK TABLES `shippings` WRITE;
-/*!40000 ALTER TABLE `shippings` DISABLE KEYS */;
-INSERT INTO `shippings` VALUES (1,'Standard Shipping','Delivery in 5-7 business days',25000.00,'active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(2,'Express Shipping','Delivery in 2-3 business days',50000.00,'active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(3,'Overnight Shipping','Delivery next business day',100000.00,'active','2026-06-14 01:35:01','2026-06-14 01:35:01'),(4,'Pickup','Free pickup at our store',0.00,'active','2026-06-14 01:35:01','2026-06-14 01:35:01');
-/*!40000 ALTER TABLE `shippings` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -653,19 +431,19 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` text COLLATE utf8mb4_unicode_ci,
   `post_code` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -674,38 +452,8 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Test User','test@example.com',NULL,NULL,NULL,'2026-06-14 01:35:00','$2y$12$2LRnBwJ/KsdkSGCgS4BYn.GSJbVzZRDky1VpZ6tS/BiZAwI5upg.a','iBueVH14p6Do8JbJuu9zn0eXhFrSWwsBxt3G4RphsyLv45QmXChRz1aNpvx9','2026-06-14 01:35:01','2026-06-14 01:35:01'),(2,'Admin Diena Parfum','admin@dienaparfum.com','089512345678','Jalan Melati No. 45, Kebayoran Baru, Jakarta Selatan','12140','2026-06-23 09:43:16','$2y$12$TjQv3hrXbbuWqV0j/RNKMuw.ybNDJfvQYvzESwKE8oXF2BxSeQFz.','xbrl8k8zC8FsyeMaTtrPKj87Qh9E967h1HDevRp4yXncSUkOGM4JX3wn9UxZ','2026-06-23 09:43:16','2026-06-26 12:33:20'),(3,'azhryan','info.azhryan@gmail.com',NULL,NULL,NULL,NULL,'$2y$12$JxVUmQKXtrH36EMtZHq8q.SAR0T842Pkczr.GfYqcaRgBuc6yNd4a',NULL,'2026-06-23 09:44:33','2026-06-23 09:44:33'),(4,'vinson','vinson@gmai.com',NULL,NULL,NULL,NULL,'$2y$12$i3Qs1Gb7VUvbXvI/W0auzeerDVtuMHys8nAQ0dUnL8RnMry5MfdNi',NULL,'2026-06-26 23:20:04','2026-06-26 23:20:04');
+INSERT INTO `users` VALUES (1,'Test User','test@example.com',NULL,NULL,NULL,'2026-06-28 06:00:48','$2y$12$78b6V6wr/LEAQ0AKGvVCOeBXtfkGlLnv35Jo71EUI86ND4wXaEeOm','UCSxnJNh2s','2026-06-28 06:00:49','2026-06-28 06:00:49');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wishlists`
---
-
-DROP TABLE IF EXISTS `wishlists`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wishlists` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint unsigned NOT NULL,
-  `product_id` bigint unsigned NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `wishlists_user_id_product_id_unique` (`user_id`,`product_id`),
-  KEY `wishlists_product_id_foreign` (`product_id`),
-  CONSTRAINT `wishlists_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `wishlists_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `wishlists`
---
-
-LOCK TABLES `wishlists` WRITE;
-/*!40000 ALTER TABLE `wishlists` DISABLE KEYS */;
-/*!40000 ALTER TABLE `wishlists` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -717,4 +465,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-27 13:23:41
+-- Dump completed on 2026-06-28 20:26:20
