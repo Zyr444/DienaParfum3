@@ -11,7 +11,6 @@ class Order extends Model
         'order_number',
         'user_id',
         'sub_total',
-        'shipping_id',
         'coupon',
         'total_amount',
         'quantity',
@@ -36,11 +35,6 @@ class Order extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function shipping(): BelongsTo
-    {
-        return $this->belongsTo(Shipping::class);
     }
 
     public function items(): \Illuminate\Database\Eloquent\Relations\HasMany

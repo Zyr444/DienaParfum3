@@ -14,20 +14,13 @@ Route::post('/api/chat-ai', [AIChatController::class, 'chat']);
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout');
 
 Route::get('/dashboard', function () {
-    $coupons = App\Models\Coupon::where('status', 'active')
-        ->where(function($query) {
-            $query->whereNull('expires_at')
-                  ->orWhere('expires_at', '>', now());
-        })
-        ->get();
-
     $orders = App\Models\Order::where('user_id', auth()->id())
         ->with('items.product')
         ->latest()
         ->get();
 
     return Inertia::render('Dashboard', [
-        'coupons' => $coupons,
+        'coupons' => [],
         'orders' => $orders
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');

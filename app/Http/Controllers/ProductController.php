@@ -13,7 +13,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category', 'brand')->get()->map(function ($product) {
+        $products = Product::with('category')->get()->map(function ($product) {
             if ($product->image && !str_starts_with($product->image, 'http')) {
                 if (str_starts_with($product->image, 'products/')) {
                     $product->image = asset('storage/' . $product->image);
@@ -24,20 +24,13 @@ class ProductController extends Controller
             return $product;
         });
 
-        $coupons = \App\Models\Coupon::where('status', 'active')
-            ->where(function($query) {
-                $query->whereNull('expires_at')
-                      ->orWhere('expires_at', '>', now());
-            })
-            ->get();
-
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
             'products' => $products,
-            'coupons' => $coupons,
+            'coupons' => [],
         ]);
     }
 }

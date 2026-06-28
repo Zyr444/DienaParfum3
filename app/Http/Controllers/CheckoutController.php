@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -63,10 +62,7 @@ class CheckoutController extends Controller
             ]);
         }
 
-        // Clear user's active cart in database if logged in
-        if (auth()->check()) {
-            Cart::where('user_id', auth()->id())->delete();
-        }
+        // Active cart items are managed client-side in localStorage
 
         return response()->json([
             'success' => true,

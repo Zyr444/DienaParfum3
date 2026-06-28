@@ -14,7 +14,7 @@ class AIChatController extends Controller
         ]);
 
         $message = strtolower($request->input('message'));
-        $products = Product::with('category', 'brand')->get();
+        $products = Product::with('category')->get();
 
         // 1. Detect category/gender intent
         $targetCategory = null;

@@ -21,7 +21,6 @@ class Product extends Model
         'stock',
         'quantity',
         'category_id',
-        'brand_id',
         'sku',
         'status',
         'added_by',
@@ -35,25 +34,5 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
-    }
-
-    public function brand(): BelongsTo
-    {
-        return $this->belongsTo(Brand::class);
-    }
-
-    public function carts(): HasMany
-    {
-        return $this->hasMany(Cart::class);
-    }
-
-    public function wishlists(): HasMany
-    {
-        return $this->hasMany(Wishlist::class);
-    }
-
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(ProductReview::class);
     }
 }

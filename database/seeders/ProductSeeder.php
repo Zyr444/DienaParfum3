@@ -6,7 +6,6 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Brand;
 use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
@@ -42,14 +41,13 @@ class ProductSeeder extends Seeder
 
         $notes = ['Bergamot', 'Patchouli', 'Neroli', 'Vetiver', 'Cardamom', 'Ylang-Ylang', 'Tonka Bean', 'Leather', 'Jasmine', 'Oud', 'Rose', 'Vanilla', 'Sandalwood', 'Musk'];
 
-        // Get categories and brands
+        // Get categories
         $womenCategory = Category::where('slug', 'womens-fragrance')->first();
         $menCategory = Category::where('slug', 'mens-fragrance')->first();
         $unisexCategory = Category::where('slug', 'unisex-fragrance')->first();
-        $brands = Brand::all();
 
-        if (!$brands->count() || !$womenCategory || !$menCategory || !$unisexCategory) {
-            $this->command->warn('Please run BrandSeeder and CategorySeeder first!');
+        if (!$womenCategory || !$menCategory || !$unisexCategory) {
+            $this->command->warn('Please run CategorySeeder first!');
             return;
         }
 
@@ -67,8 +65,6 @@ class ProductSeeder extends Seeder
             } else {
                 $category = $unisexCategory;
             }
-            $brand = $brands->random();
-
             $price = $faker->numberBetween(18, 60) * 100000;
             $slug = Str::slug($aromaName);
             $sku = 'DIENA-' . Str::upper(Str::random(6));
@@ -85,7 +81,6 @@ class ProductSeeder extends Seeder
                 'photo'          => $allImages[$i % count($allImages)],
                 'stock'          => $faker->numberBetween(5, 25),
                 'category_id'    => $category->id,
-                'brand_id'       => $brand->id,
                 'sku'            => $sku,
                 'status'         => 'active',
             ]);

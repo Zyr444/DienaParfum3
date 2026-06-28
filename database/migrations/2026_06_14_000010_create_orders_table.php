@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->decimal('sub_total', 10, 2);
-            $table->foreignId('shipping_id')->nullable()->constrained('shippings')->onDelete('set null');
+            $table->decimal('shipping_cost', 10, 2)->default(0);
             $table->string('coupon')->nullable();
             $table->decimal('total_amount', 10, 2);
             $table->integer('quantity')->default(0);
