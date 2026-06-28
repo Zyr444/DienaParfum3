@@ -56,7 +56,7 @@ export default function Dashboard({ coupons = [], orders = [] }) {
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-serif leading-tight text-gray-900">
-                    Dashboard Pelanggan
+                    Hi, {user.name}!
                 </h2>
             }
         >
